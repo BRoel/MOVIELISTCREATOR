@@ -10,9 +10,9 @@ class Movie < ApplicationRecord
         movie.validates :release_date, numericality: {
           less_than_or_equal_to: Date.today.year
         }
-      end
+    end
     validates :genre, presence: true, length: { maximum: 100 }
-    validates :description, presence: true, length: { maximum: 100 }
+    validates :description, presence: true, length: { maximum: 1000 }
 
     def released?
         released
