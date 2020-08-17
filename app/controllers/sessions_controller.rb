@@ -1,28 +1,43 @@
 class SessionsController < ApplicationController
 
-    def new
-      @user = User.new
-      render :login
+  def new
+    @user = User.new
+    render :login
+  end
+
+  def create
+    @user = User.find_by(username: params[:user][:username])
+    if @user && @user.authenticate(params[:user][:password])
+      session[:user_id] = @user.id
+      redirect_to lists_path
+    else
+      flash[:error] = "Your username or password was incorrect"
+      redirect_to '/login'
     end
+  end
+
+  #logout
+  def destroy
+    session.clear
+    redirect_to '/'
+  end
   
-    def create
-      @user = User.find_by(:email => params[:email])
-      if @user && @user.authenticate(params[:password])
-        login(@user)
-        redirect_to "/"
-      else
-        redirect_to "/login", :notice => "Can't find that email."
-      end
+  def google
+    @user = User.find_or_create_by(email: auth["info"]["email"]) do |user|
+      user.username = auth["info"]["first_name"]
+      user.password = SecureRandom.hex(10)
     end
-    def create
-      @user = User.find_by(username: params[:user][:username])
-      if @user && @user.authenticate(params[:user][:password])
-        session[:user_id] = @user.id
-        redirect_to lists_path
-      else
-        flash[:error] = "Your username or password was incorrect"
-        redirect_to '/login'
-      end
+    if @user.save
+      session[:user_id] = @user.id
+      redirect_to user_path(@user)
+    else
+      redirect_to '/'
     end
-  
+  end
+
+  private
+
+  def auth
+    request.env['omniauth.auth']
+  end
 end
