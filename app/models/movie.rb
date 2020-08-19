@@ -4,17 +4,17 @@ class Movie < ApplicationRecord
 
     validates :title, presence: true, length: { maximum: 100 }
     validates :rating, presence: true, length: { maximum: 100 }
-    validates :released, inclusion: { in: [true, false] }
-    with_options if: :released? do |movie|
-        movie.validates :release_date, presence: true
-        movie.validates :release_date, numericality: {
-          less_than_or_equal_to: Date.today.year
-        }
-    end
+    # validates :released, inclusion: { in: [true, false] }
+    # with_options if: :released? do |movie|
+    #     movie.validates :release_date, presence: true
+    #     movie.validates :release_date, numericality: {
+    #       less_than_or_equal_to: Date.today.year
+    #     }
+    # end
     validates :genre, presence: true, length: { maximum: 100 }
     validates :description, presence: true, length: { maximum: 1000 }
 
-    def released?
-        released
-    end
+    # def released?
+    #     released
+    # end
 end

@@ -1,2 +1,3 @@
 class MovieListsController < ApplicationController
+    
 end

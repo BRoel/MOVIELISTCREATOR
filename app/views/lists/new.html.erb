@@ -1,2 +1,13 @@
 <h1> New Movie List </h1>
 
+<%= form_for(@list) do |f| %>
+
+    <div>
+    <%= f.label :list_name %>
+    <%= f.text_field :list_name, required:true %>
+    </div>
+    <div>
+    <%= f.submit "Create Movie List" %>
+    </div>
+  
+  <% end %>
